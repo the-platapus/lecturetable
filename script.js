@@ -1,15 +1,24 @@
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+// Update Header Date immediately
+function updateDateDisplay() {
+    const now = new Date();
+    document.getElementById('date-display').textContent = `LGU · ${now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+}
+updateDateDisplay();
+
 async function loadTimetable() {
     try {
         const response = await fetch('timetable.json');
         if (!response.ok) throw new Error("timetable.json not found");
         const timetable = await response.json();
         renderUI(timetable);
-        setInterval(() => renderUI(timetable), 60000); // update every minute
+        // Clear any old interval before setting a new one
+        if (window.timetableInterval) clearInterval(window.timetableInterval);
+        window.timetableInterval = setInterval(() => renderUI(timetable), 60000); 
     } catch (e) {
-        console.error("Error loading timetable", e);
-        document.getElementById('next-class-label').textContent = "Waiting for initial sync from GitHub Actions...";
+        console.error("Error loading timetable:", e);
+        document.getElementById('next-class-label').innerHTML = `<span style="color:#f28b82;">Error: Timetable not found.</span> Please ensure you are viewing this via a web server (like localhost:8005) or GitHub Pages, not double-clicking the HTML file.`;
     }
 }
 
@@ -33,9 +42,6 @@ function formatAMPM(date) {
 function renderUI(timetable) {
     const now = new Date();
     const todayName = days[now.getDay()];
-    
-    // Update Header Date
-    document.getElementById('date-display').textContent = `LGU · ${now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
 
     const todaysClasses = timetable[todayName] || [];
     
