@@ -13,7 +13,7 @@ def main():
     url_timetable = "https://timetable.lgu.edu.pk/Semesters/semester_info/SEMESTER_TIMETABLE.php"
     
     with requests.Session() as session:
-        session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+        session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"})
         print("Authenticating...")
         session.post(url_login, data={"login-btn": ""})
         
@@ -34,7 +34,9 @@ def main():
         }
         
         if not table:
-            raise Exception("Timetable table not found in the HTML response! The API might have rejected the request or the semester format is incorrect.")
+            print("FAILED TO FIND TABLE! HTML Response:")
+            print(response.text[:1500])
+            raise Exception("Timetable table not found in the HTML response!")
             
         for row in table.find_all("tr")[2:]:
             day_th = row.find("th")
