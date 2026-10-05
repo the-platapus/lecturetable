@@ -1,5 +1,7 @@
 name: Update Timetable
 on:
+  push:
+    branches: [ "main", "master" ]
   schedule:
     - cron: '0 0 * * 0' # Run every Sunday at midnight (UTC)
   workflow_dispatch: # Allow manual trigger from GitHub UI
