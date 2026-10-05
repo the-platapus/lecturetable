@@ -5,14 +5,15 @@ from bs4 import BeautifulSoup
 
 def main():
     # Keep these in GitHub Actions Repository Secrets / Variables
-    program = os.getenv("PROGRAM", "74")
-    section = os.getenv("SECTION", "1")
-    semester = os.getenv("SEMESTER", "6th Semester Fa-2026 / Sp-2024")
+    program = os.getenv("PROGRAM")
+    section = os.getenv("SECTION")
+    semester = os.getenv("SEMESTER")
 
     url_login = "https://timetable.lgu.edu.pk/index.php"
     url_timetable = "https://timetable.lgu.edu.pk/Semesters/semester_info/SEMESTER_TIMETABLE.php"
     
     with requests.Session() as session:
+        session.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
         print("Authenticating...")
         session.post(url_login, data={"login-btn": ""})
         
@@ -33,8 +34,7 @@ def main():
         }
         
         if not table:
-            print("Table not found!")
-            return
+            raise Exception("Timetable table not found in the HTML response! The API might have rejected the request or the semester format is incorrect.")
             
         for row in table.find_all("tr")[2:]:
             day_th = row.find("th")
