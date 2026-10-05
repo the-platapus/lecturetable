@@ -38,7 +38,7 @@ def main():
             print(response.text[:1500])
             raise Exception("Timetable table not found in the HTML response!")
             
-        for row in table.find_all("tr")[2:]:
+        for row in table.find_all("tr")[1:]:
             day_th = row.find("th")
             if not day_th: continue
             day = day_th.text.strip()
