@@ -171,6 +171,11 @@ tr.active-day {
     font-size: 12px;
 }
 
+.full-class-pill.over {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
 footer {
     margin-top: 20px;
     font-size: 12px;

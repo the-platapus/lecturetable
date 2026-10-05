@@ -100,13 +100,27 @@ function renderUI(timetable) {
     const tbody = document.querySelector('#full-timetable tbody');
     tbody.innerHTML = '';
     
+    const getAdjustedDay = (d) => d === 0 ? 7 : d;
+    const adjustedToday = getAdjustedDay(now.getDay());
+
     ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
         const tr = document.createElement('tr');
         if (day === todayName) tr.className = 'active-day';
         
-        const classesHtml = (timetable[day] || []).map(c => 
-            `<span class="full-class-pill">${c.start} - ${c.subject}</span>`
-        ).join(' ') || '-';
+        const classDayIndex = days.indexOf(day);
+        const adjustedClassDay = getAdjustedDay(classDayIndex);
+
+        const classesHtml = (timetable[day] || []).map(c => {
+            let isOver = false;
+            if (adjustedClassDay < adjustedToday) {
+                isOver = true; // Past day
+            } else if (adjustedClassDay === adjustedToday) {
+                isOver = parseTime(c.end) < now; // Today, but time has passed
+            }
+
+            const pillClass = isOver ? 'full-class-pill over' : 'full-class-pill';
+            return `<span class="${pillClass}">${c.start} - ${c.subject}</span>`;
+        }).join(' ') || '-';
         
         tr.innerHTML = `
             <td>${day}</td>
