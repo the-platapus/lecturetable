@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Timetable</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <header>
+            <h1 class="title">Class Timetable</h1>
+            <p class="subtitle" id="date-display">Loading date...</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-target="today-view">Today</button>
+            <button class="tab" data-target="full-view">Full Week</button>
+        </nav>
+
+        <!-- Today View -->
+        <div id="today-view" class="view active">
+            <div class="next-class-info">
+                <p id="next-class-label">Loading timetable...</p>
+                <h2 id="next-class-big-time">--:--</h2>
+            </div>
+
+            <div class="classes-row" id="classes-row">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Full Week View -->
+        <div id="full-view" class="view">
+            <div class="table-container">
+                <table id="full-timetable">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Classes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Based on: Lahore Garrison University · <a href="#" id="refresh-btn">Refresh UI</a></p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

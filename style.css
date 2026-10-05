@@ -1,0 +1,183 @@
+body {
+    background-color: #202124;
+    color: #e8eaed;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.card {
+    background-color: #303134;
+    border: 1px solid #3c4043;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0 0 5px 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #9aa0a6;
+    margin: 0;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #3c4043;
+    margin-bottom: 20px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: #9aa0a6;
+    font-size: 14px;
+    padding: 10px 16px;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+}
+
+.tab.active {
+    color: #f28b82; /* Similar to the red active tab in the Google UI */
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #f28b82;
+}
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+.next-class-info {
+    margin-bottom: 30px;
+}
+
+#next-class-label {
+    font-size: 14px;
+    color: #9aa0a6;
+    margin: 0 0 10px 0;
+}
+
+#next-class-label span {
+    color: #e8eaed;
+    font-weight: bold;
+}
+
+#next-class-big-time {
+    font-size: 44px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.classes-row {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #3c4043;
+}
+
+.classes-row::-webkit-scrollbar {
+    height: 6px;
+}
+
+.classes-row::-webkit-scrollbar-thumb {
+    background-color: #5f6368;
+    border-radius: 10px;
+}
+
+.class-item {
+    min-width: 120px;
+    text-align: center;
+    padding: 10px;
+}
+
+.class-item.active {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+}
+
+.class-item .subject-name {
+    font-size: 14px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.class-item .class-time {
+    font-size: 13px;
+    color: #9aa0a6;
+}
+
+/* Table styles */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 12px 10px;
+    border-bottom: 1px solid #3c4043;
+    font-size: 14px;
+}
+
+th {
+    color: #9aa0a6;
+    font-weight: normal;
+}
+
+tr.active-day {
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.full-class-pill {
+    display: inline-block;
+    background: #4a4d51;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin: 3px;
+    font-size: 12px;
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #9aa0a6;
+}
+
+footer a {
+    color: #8ab4f8;
+    text-decoration: none;
+}

@@ -1,0 +1,6 @@
+node_modules/
+__pycache__/
+*.pyc
+.env
+timetable.json
+.DS_Store
