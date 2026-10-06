@@ -124,7 +124,17 @@ header {
 
 .class-item .subject-name {
     font-size: 14px;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.class-item .class-room {
+    font-size: 12px;
+    color: #8ab4f8;
+    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

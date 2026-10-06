@@ -33,12 +33,12 @@ function formatAMPM(date) {
 function renderUI(timetable) {
     const now = new Date();
     const todayName = days[now.getDay()];
-    
+
     // Update Header Date
     document.getElementById('date-display').textContent = `LGU · ${now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
 
     const todaysClasses = timetable[todayName] || [];
-    
+
     // Find Next Class
     let nextClass = null;
     let currentClass = null;
@@ -47,7 +47,7 @@ function renderUI(timetable) {
     todaysClasses.forEach(c => {
         const start = parseTime(c.start);
         const end = parseTime(c.end);
-        
+
         if (now >= start && now <= end) {
             currentClass = c;
         } else if (start > now && (start - now) < nextClassTimeDiff) {
@@ -62,12 +62,12 @@ function renderUI(timetable) {
     if (currentClass) {
         const end = parseTime(currentClass.end);
         const minsLeft = Math.ceil((end - now) / 60000);
-        nextLabel.innerHTML = `Ongoing: <span>${currentClass.subject}</span> ends in <span>${minsLeft} minutes</span>`;
+        nextLabel.innerHTML = `Ongoing: <span>${currentClass.subject}</span> in <span>${currentClass.room}</span> ends in <span>${minsLeft} minutes</span>`;
         bigTime.textContent = formatAMPM(end);
     } else if (nextClass) {
         const minsLeft = Math.ceil(nextClassTimeDiff / 60000);
-        const timeText = minsLeft > 60 ? `${Math.floor(minsLeft/60)} hrs ${minsLeft%60} mins` : `${minsLeft} minutes`;
-        nextLabel.innerHTML = `Next class: <span>${nextClass.subject}</span> in <span>${timeText}</span>`;
+        const timeText = minsLeft > 60 ? `${Math.floor(minsLeft / 60)} hrs ${minsLeft % 60} mins` : `${minsLeft} minutes`;
+        nextLabel.innerHTML = `Next class: <span>${nextClass.subject}</span> in <span>${nextClass.room}</span> in <span>${timeText}</span>`;
         bigTime.textContent = formatAMPM(parseTime(nextClass.start));
     } else {
         nextLabel.innerHTML = `No more classes today!`;
@@ -77,7 +77,7 @@ function renderUI(timetable) {
     // Render Today's Classes Row
     const row = document.getElementById('classes-row');
     row.innerHTML = '';
-    
+
     if (todaysClasses.length === 0) {
         row.innerHTML = '<div class="class-item" style="opacity: 0.6;">No classes today</div>';
     } else {
@@ -85,7 +85,7 @@ function renderUI(timetable) {
             const start = parseTime(c.start);
             const end = parseTime(c.end);
             const isActive = (now >= start && now <= end) || (nextClass === c && !currentClass);
-            
+
             const item = document.createElement('div');
             item.className = `class-item ${isActive ? 'active' : ''}`;
             item.innerHTML = `
@@ -99,14 +99,14 @@ function renderUI(timetable) {
     // Render Full Timetable
     const tbody = document.querySelector('#full-timetable tbody');
     tbody.innerHTML = '';
-    
+
     const getAdjustedDay = (d) => d === 0 ? 7 : d;
     const adjustedToday = getAdjustedDay(now.getDay());
 
     ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => {
         const tr = document.createElement('tr');
         if (day === todayName) tr.className = 'active-day';
-        
+
         const classDayIndex = days.indexOf(day);
         const adjustedClassDay = getAdjustedDay(classDayIndex);
 
@@ -121,7 +121,7 @@ function renderUI(timetable) {
             const pillClass = isOver ? 'full-class-pill over' : 'full-class-pill';
             return `<span class="${pillClass}">${c.start} - ${c.subject}</span>`;
         }).join(' ') || '-';
-        
+
         tr.innerHTML = `
             <td>${day}</td>
             <td>${classesHtml}</td>
@@ -135,7 +135,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', (e) => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        
+
         e.target.classList.add('active');
         document.getElementById(e.target.dataset.target).classList.add('active');
     });
