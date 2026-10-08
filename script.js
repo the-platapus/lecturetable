@@ -1,12 +1,27 @@
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+let initialScrollDone = false;
+
 async function loadTimetable() {
     try {
         const response = await fetch('timetable.json');
         if (!response.ok) throw new Error("timetable.json not found");
         const timetable = await response.json();
         renderUI(timetable);
-        setInterval(() => renderUI(timetable), 60000); // update every minute
+        
+        if (!initialScrollDone) {
+            setTimeout(() => {
+                const activeCard = document.querySelector('.class-item.active');
+                if (activeCard) {
+                    activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
+                initialScrollDone = true;
+            }, 2000);
+        }
+
+        if (!window.timetableInterval) {
+            window.timetableInterval = setInterval(() => renderUI(timetable), 60000); // update every minute
+        }
     } catch (e) {
         console.error("Error loading timetable", e);
         document.getElementById('next-class-label').textContent = "Waiting for initial sync from GitHub Actions...";
