@@ -97,6 +97,7 @@ header {
 
 .classes-row {
     display: flex;
+    gap: 12px;
     overflow-x: auto;
     padding-bottom: 15px;
     border-bottom: 1px solid #3c4043;
@@ -112,14 +113,17 @@ header {
 }
 
 .class-item {
-    min-width: 120px;
+    min-width: 160px;
     text-align: center;
-    padding: 10px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border: 1px solid transparent;
 }
 
 .class-item.active {
-    background-color: rgba(255, 255, 255, 0.04);
-    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: #5f6368;
 }
 
 .class-item .subject-name {
@@ -128,7 +132,7 @@ header {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 140px;
+    max-width: 100%;
 }
 
 .class-item .class-room {
@@ -138,7 +142,7 @@ header {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 140px;
+    max-width: 100%;
 }
 
 .class-item .class-time {
