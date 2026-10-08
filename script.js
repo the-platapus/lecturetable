@@ -90,7 +90,8 @@ function renderUI(timetable) {
             item.className = `class-item ${isActive ? 'active' : ''}`;
             item.innerHTML = `
                 <div class="subject-name" title="${c.subject}">${c.subject}</div>
-                <div class="class-time">${formatAMPM(start)}</div>
+                <div class="class-room" title="${c.room}">${c.room}</div>
+                <div class="class-time">${formatAMPM(start)} - ${formatAMPM(end)}</div>
             `;
             row.appendChild(item);
         });
@@ -119,7 +120,7 @@ function renderUI(timetable) {
             }
 
             const pillClass = isOver ? 'full-class-pill over' : 'full-class-pill';
-            return `<span class="${pillClass}">${c.start} - ${c.subject}</span>`;
+            return `<span class="${pillClass}">${c.start} - ${c.end} | ${c.subject} (${c.room})</span>`;
         }).join(' ') || '-';
 
         tr.innerHTML = `
