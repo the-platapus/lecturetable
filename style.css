@@ -78,6 +78,135 @@ header {
     margin-bottom: 30px;
 }
 
+/* Timeline Bar & Free-time Indicator */
+.timeline-container {
+    margin-bottom: 24px;
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 7px;
+}
+
+.timeline-time-label {
+    font-size: 11px;
+    color: #9aa0a6;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
+.timeline-legend {
+    display: flex;
+    gap: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #9aa0a6;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legend-dot.free {
+    background-color: #81c995;
+    box-shadow: 0 0 4px rgba(129, 201, 149, 0.4);
+}
+
+.legend-dot.class {
+    background-color: #f28b82;
+    box-shadow: 0 0 4px rgba(242, 139, 130, 0.4);
+}
+
+.timeline-bar-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.timeline-bar {
+    display: flex;
+    width: 100%;
+    height: 14px;
+    background-color: #202124;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #3c4043;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.timeline-segment {
+    height: 100%;
+    position: relative;
+    box-sizing: border-box;
+    transition: width 0.3s ease;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
+    cursor: default;
+}
+
+.timeline-segment:last-child {
+    border-right: none;
+}
+
+.timeline-segment.free {
+    background-color: #81c995;
+}
+
+.timeline-segment.class {
+    background-color: #f28b82;
+}
+
+.timeline-segment:hover {
+    filter: brightness(1.15);
+}
+
+.timeline-arrow-track {
+    position: relative;
+    width: 100%;
+    height: 22px;
+    margin-top: 4px;
+}
+
+.timeline-arrow-indicator {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    transition: left 0.4s ease, opacity 0.3s ease;
+}
+
+.timeline-arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 6px solid #e8eaed;
+}
+
+.timeline-arrow-time {
+    font-size: 10px;
+    color: #e8eaed;
+    font-weight: 600;
+    margin-top: 2px;
+    white-space: nowrap;
+    background: #3c4043;
+    padding: 1px 5px;
+    border-radius: 4px;
+    border: 1px solid #5f6368;
+    line-height: 1.2;
+}
+
 #next-class-label {
     font-size: 14px;
     color: #9aa0a6;

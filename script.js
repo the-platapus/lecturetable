@@ -45,6 +45,132 @@ function formatAMPM(date) {
     return hours + ':' + minutes + ' ' + ampm;
 }
 
+function formatMinutesTime(mins) {
+    const hours = Math.floor(mins / 60);
+    const m = mins % 60;
+    const ampm = hours >= 12 ? 'pm' : 'am';
+    let h12 = hours % 12;
+    h12 = h12 ? h12 : 12;
+    const mStr = m < 10 ? '0' + m : m;
+    return `${h12}:${mStr} ${ampm}`;
+}
+
+function getWeekRange(timetable) {
+    let earliest = null;
+    let latest = null;
+
+    Object.values(timetable).forEach(classes => {
+        if (!Array.isArray(classes)) return;
+        classes.forEach(c => {
+            const [sH, sM] = c.start.split(':').map(Number);
+            const [eH, eM] = c.end.split(':').map(Number);
+            const sMins = sH * 60 + sM;
+            const eMins = eH * 60 + eM;
+
+            if (earliest === null || sMins < earliest) earliest = sMins;
+            if (latest === null || eMins > latest) latest = eMins;
+        });
+    });
+
+    if (earliest === null) earliest = 8 * 60;
+    if (latest === null) latest = 16 * 60;
+    return { earliest, latest };
+}
+
+function renderTimeline(timetable, todaysClasses, now) {
+    const { earliest, latest } = getWeekRange(timetable);
+    const totalRange = latest - earliest;
+    if (totalRange <= 0) return;
+
+    const startLabel = document.getElementById('timeline-start-label');
+    const endLabel = document.getElementById('timeline-end-label');
+    if (startLabel) startLabel.textContent = formatMinutesTime(earliest);
+    if (endLabel) endLabel.textContent = formatMinutesTime(latest);
+
+    const sortedClasses = [...todaysClasses].map(c => {
+        const [sH, sM] = c.start.split(':').map(Number);
+        const [eH, eM] = c.end.split(':').map(Number);
+        return {
+            ...c,
+            startMins: sH * 60 + sM,
+            endMins: eH * 60 + eM
+        };
+    }).sort((a, b) => a.startMins - b.startMins);
+
+    const segments = [];
+    let cursor = earliest;
+
+    sortedClasses.forEach(c => {
+        const classStart = Math.max(cursor, c.startMins);
+        const classEnd = Math.min(latest, c.endMins);
+
+        if (classStart > cursor) {
+            segments.push({
+                type: 'free',
+                start: cursor,
+                end: classStart
+            });
+        }
+
+        if (classEnd > classStart) {
+            segments.push({
+                type: 'class',
+                start: classStart,
+                end: classEnd,
+                subject: c.subject,
+                room: c.room
+            });
+            cursor = classEnd;
+        }
+    });
+
+    if (cursor < latest) {
+        segments.push({
+            type: 'free',
+            start: cursor,
+            end: latest
+        });
+    }
+
+    const bar = document.getElementById('timeline-bar');
+    if (bar) {
+        bar.innerHTML = '';
+        segments.forEach(seg => {
+            const segDiv = document.createElement('div');
+            const pct = ((seg.end - seg.start) / totalRange) * 100;
+            segDiv.className = `timeline-segment ${seg.type}`;
+            segDiv.style.width = `${pct}%`;
+
+            const timeStr = `${formatMinutesTime(seg.start)} - ${formatMinutesTime(seg.end)}`;
+            if (seg.type === 'class') {
+                segDiv.title = `${seg.subject} (${seg.room}) · ${timeStr}`;
+            } else {
+                segDiv.title = `Free Time · ${timeStr}`;
+            }
+            bar.appendChild(segDiv);
+        });
+    }
+
+    const indicator = document.getElementById('timeline-arrow-indicator');
+    const arrowTime = document.getElementById('timeline-arrow-time');
+    if (indicator) {
+        const nowMins = now.getHours() * 60 + now.getMinutes() + now.getSeconds() / 60;
+        const progress = ((nowMins - earliest) / totalRange) * 100;
+        const clampedProgress = Math.min(Math.max(progress, 0), 100);
+        indicator.style.left = `${clampedProgress}%`;
+
+        if (arrowTime) {
+            arrowTime.textContent = formatAMPM(now);
+        }
+
+        if (nowMins < earliest || nowMins > latest) {
+            indicator.style.opacity = '0.6';
+        } else {
+            indicator.style.opacity = '1';
+        }
+    }
+}
+
 function renderUI(timetable) {
     const now = new Date();
     const todayName = days[now.getDay()];
@@ -53,6 +179,9 @@ function renderUI(timetable) {
     document.getElementById('date-display').textContent = `LGU · ${now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`;
 
     const todaysClasses = timetable[todayName] || [];
+
+    // Render Free-time & Class Timeline Bar
+    renderTimeline(timetable, todaysClasses, now);
 
     // Find Next Class
     let nextClass = null;
@@ -75,9 +204,26 @@ function renderUI(timetable) {
     const bigTime = document.getElementById('next-class-big-time');
 
     if (currentClass) {
+        const start = parseTime(currentClass.start);
         const end = parseTime(currentClass.end);
+        const totalDurationMins = Math.round((end - start) / 60000);
+        const minsPassed = Math.floor((now - start) / 60000);
         const minsLeft = Math.ceil((end - now) / 60000);
-        nextLabel.innerHTML = `Ongoing: <span>${currentClass.subject}</span> in <span>${currentClass.room}</span> ends in <span>${minsLeft} minutes</span>`;
+
+        const startThresholdMins = totalDurationMins * 0.3;
+        const endThresholdMins = totalDurationMins * 0.1;
+
+        let statusText = "";
+        if (minsPassed <= startThresholdMins) {
+            statusText = "Just started";
+        } else if (minsLeft <= endThresholdMins) {
+            statusText = "Almost there";
+        } else if (totalDurationMins > 45) {
+            statusText = "Still going…";
+        }
+
+        const statusSuffix = statusText ? ` · <span>${statusText}</span>` : "";
+        nextLabel.innerHTML = `Ongoing: <span>${currentClass.subject}</span> in <span>${currentClass.room}</span> ends in <span>${minsLeft} minutes</span>${statusSuffix}`;
         bigTime.textContent = formatAMPM(end);
     } else if (nextClass) {
         const minsLeft = Math.ceil(nextClassTimeDiff / 60000);

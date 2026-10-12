@@ -21,6 +21,29 @@
         <!-- Today View -->
         <div id="today-view" class="view active">
             <div class="next-class-info">
+                <!-- Free-time & Class Timeline Bar -->
+                <div class="timeline-container" id="timeline-container">
+                    <div class="timeline-header">
+                        <span class="timeline-time-label" id="timeline-start-label">--:--</span>
+                        <div class="timeline-legend">
+                            <span class="legend-item"><span class="legend-dot free"></span>Free</span>
+                            <span class="legend-item"><span class="legend-dot class"></span>Class</span>
+                        </div>
+                        <span class="timeline-time-label" id="timeline-end-label">--:--</span>
+                    </div>
+                    <div class="timeline-bar-wrapper">
+                        <div class="timeline-bar" id="timeline-bar">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="timeline-arrow-track" id="timeline-arrow-track">
+                            <div class="timeline-arrow-indicator" id="timeline-arrow-indicator">
+                                <div class="timeline-arrow"></div>
+                                <span class="timeline-arrow-time" id="timeline-arrow-time">--:--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <p id="next-class-label">Loading timetable...</p>
                 <h2 id="next-class-big-time">--:--</h2>
             </div>
