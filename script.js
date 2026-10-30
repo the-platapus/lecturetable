@@ -251,6 +251,7 @@ function renderUI(timetable) {
             item.className = `class-item ${isActive ? 'active' : ''}`;
             item.innerHTML = `
                 <div class="subject-name" title="${c.subject}">${c.subject}</div>
+                ${c.teacher ? `<div class="class-teacher" title="${c.teacher}">${c.teacher}</div>` : ''}
                 <div class="class-room" title="${c.room}">${c.room}</div>
                 <div class="class-time">${formatAMPM(start)} - ${formatAMPM(end)}</div>
             `;
